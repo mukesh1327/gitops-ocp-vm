@@ -1,14 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: test-vm
+
+  name: prod-vm
   namespace: openshift-gitops
+
 spec:
+
   destination:
     namespace: vps-apps
     server: 'https://kubernetes.default.svc'
+
   project: vm-setup
+
   source:
-    path: virtual-machine/overlays/dev
+    path: virtual-machine/overlays/prod
     repoURL: 'https://github.com/mukesh1327/gitops-ocp-vm.git'
     targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
