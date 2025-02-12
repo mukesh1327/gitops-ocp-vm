@@ -1,0 +1,46 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+
+namePrefix: prod-
+
+
+commonLabels:
+  app: prod-rhel9-vm
+  app.kubernetes.io/managed-by: kustomize
+
+
+patches:
+
+  - target:
+      kind: VirtualMachine
+      name: rhel9-vm
+    patch: |
+      - op: replace
+        path: /spec/template/spec/domain/resources/requests/memory
+        value: 9Gi
+
+  - target:
+      kind: VirtualMachine
+      name: rhel9-vm
+    patch: |
+      - op: replace
+        path: /spec/running
+        value: true  
+
+  - target:
+      group: kubevirt.io
+      version: v1
+      kind: VirtualMachine
+      name: rhel9-vm
+    patch: |-
+      - op: replace
+        path: "/spec/template/spec/volumes/1/cloudInitNoCloud/userData"
+        value: |
+          #cloud-config
+          user: updated-user
+          password: 'NewSecurePass123$'
+          chpasswd: { expire: False }

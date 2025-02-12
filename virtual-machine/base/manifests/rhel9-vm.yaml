@@ -2,14 +2,14 @@ apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
   labels:
-    app: test-vm
-  name: test-vm
+    app: rhel9-vm
+  name: rhel9-vm
 spec:
   dataVolumeTemplates:
   - apiVersion: cdi.kubevirt.io/v1beta1
     kind: DataVolume
     metadata:
-      name: test-vm
+      name: rhel9-vm
     spec:
       sourceRef:
         kind: DataSource
@@ -23,7 +23,7 @@ spec:
   template:
     metadata:
       labels:
-        kubevirt.io/domain: test-vm
+        kubevirt.io/domain: rhel9-vm
     spec:
       domain:
         cpu:
@@ -57,7 +57,7 @@ spec:
         pod: {}
       volumes:
       - dataVolume:
-          name: test-vm
+          name: rhel9-vm
         name: rootdisk
       - cloudInitNoCloud:
           userData: |-

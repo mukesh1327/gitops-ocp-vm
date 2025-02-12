@@ -2,4 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - rhel9-vm.yaml
+  - ./manifests/rhel9-vm.yaml
+
+commonLabels:
+  app: rhel9-vm
+  app.kubernetes.io/managed-by: kustomize
