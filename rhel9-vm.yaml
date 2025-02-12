@@ -1,0 +1,68 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    app: test-vm
+  name: test-vm
+spec:
+  dataVolumeTemplates:
+  - apiVersion: cdi.kubevirt.io/v1beta1
+    kind: DataVolume
+    metadata:
+      name: test-vm
+    spec:
+      sourceRef:
+        kind: DataSource
+        name: rhel9
+        namespace: openshift-virtualization-os-images
+      storage:
+        resources:
+          requests:
+            storage: 30Gi
+  running: false
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: test-vm
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 2
+          threads: 1
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: rootdisk
+          - disk:
+              bus: virtio
+            name: cloudinitdisk
+          interfaces:
+          - masquerade: {}
+            name: default
+          rng: {}
+        features:
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        resources:
+          requests:
+            memory: 8Gi
+      evictionStrategy: LiveMigrate
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+      - dataVolume:
+          name: test-vm
+        name: rootdisk
+      - cloudInitNoCloud:
+          userData: |-
+            #cloud-config
+            user: cloud-user
+            password: 'vpsTest123$' 
+            chpasswd: { expire: False }
+        name: cloudinitdisk
