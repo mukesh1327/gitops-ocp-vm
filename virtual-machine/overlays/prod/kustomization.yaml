@@ -29,7 +29,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/running
-        value: false  
+        value: true  
 
   - target:
       group: kubevirt.io
