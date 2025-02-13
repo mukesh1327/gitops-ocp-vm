@@ -96,7 +96,7 @@ argocd repo list
 ```bash
 argocd app create ${ARGOCD_APP_NAME} \
   --repo ${GIT_REPO} \
-  --path virtual-machine/overlays/dev \
+  --path ${KUSTOMIZE_DIR} \
   --dest-namespace ${DEST_NAMESPACE} \
   --dest-server https://kubernetes.default.svc \
   --auto-prune \
